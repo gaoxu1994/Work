@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class DialogUIControl : MonoBehaviour {
 
-    [HideInInspector]
-    public static SocketConnect sc;
+    //[HideInInspector]
+    public SocketConnect sc;
     private Transform InputButtonRoot;  //输入按钮根节点
     private Button SubmitButton;    //提交按钮
     private Button AperButton;      //光圈按钮
@@ -51,28 +51,22 @@ public class DialogUIControl : MonoBehaviour {
     //点击提交事件
     void OnSubmitClick(GameObject go)
     {
+        Debug.Log("点击提交");
+
         if (flag)   //协程已经启动
         {
+            Debug.Log(" submit coroutine   return ");
             return;
         }
-        if (sc == null)
-        {
-            //获得连接实例
-            sc = SocketConnect.getSocketInstance();
-            ModelViewControl.isSubmit = true;
-            //发送请求链接信号
-            sc.SendInt(NetworkData.SENDCONNECT);
-            ////数据
-            ////交通工具类型
-            //sc.SendInt((int)NetworkData.TypeTraffic);
-            ////种类
-            //sc.SendInt((int)NetworkData.TypeSign);
-            ////车辆颜色
-            //sc.SendInt((int)NetworkData.TypeColor);
-            flag = true;
-            StartCoroutine(WaitSign());
-        }
-        
+        Debug.Log("=========Connect============");
+        //获得连接实例
+        sc = SocketConnect.getSocketInstance();
+        //这是提交信号为true
+        NetworkData.isSubmit = true;
+        //发送请求链接信号
+        sc.SendInt(NetworkData.SENDCONNECT);
+        flag = true;
+        StartCoroutine(WaitSign());     
     }
     IEnumerator WaitSign()
     {
@@ -89,7 +83,9 @@ public class DialogUIControl : MonoBehaviour {
                 //车辆颜色
                 sc.SendInt((int)NetworkData.TypeColor);
 
+                //连接成功之后，
                 NetworkData.isSucceed = false;
+
                 flag = false;
                 gameObject.SetActive(false);
                 OkButton.gameObject.SetActive(false);

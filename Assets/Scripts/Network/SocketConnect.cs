@@ -13,7 +13,7 @@ public class SocketConnect
     Thread thread;
     bool getMSGFlag = false;
     //"192.168.1.152", 8711
-    String ipStr = "192.168.1.152";
+    String ipStr = "192.168.1.156";
     int port = 8711;
     //单例模式
     public static SocketConnect getSocketInstance()//获取SocketText对象
@@ -156,6 +156,7 @@ public class SocketConnect
     {
         getMSGFlag = false;
         mySocket.Close();
+        st = null;
         //thread.Abort();
     }
 }

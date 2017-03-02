@@ -6,13 +6,8 @@ using UnityEngine.EventSystems;
 
 //脚本挂在Modelshow GameObject下
 public class ModelViewControl : MonoBehaviour {
-
-    //是否提交
-    public static bool isSubmit = false;
-
     //是否初始化数据标志位
     public static bool isInit = false;
-
     private bool isEnter = false;    //判断点击区域是否为视窗        
     private bool isClick = false ;     //是否点下事件
     private Vector3 startPos;       //点下开始位置
@@ -68,9 +63,8 @@ public class ModelViewControl : MonoBehaviour {
             MainCom.name = "MainCom";
             MainCom.transform.localPosition = Vector3.zero;
         }
-
+        //是否初始化完成
         isInit = true;
-
     }
 
     private void OnEnable()
@@ -87,13 +81,18 @@ public class ModelViewControl : MonoBehaviour {
     {
         isEnter = true;
     }
-
     void OnModelViewExit(GameObject go)
     {
         isEnter = false;
     }
-	// Update is called once per frame
-	void Update () {
+
+    private void OnDestroy()
+    {
+        isInit = false;
+        //Debug.Log("ModelViewControl Destory");
+    }
+    // Update is called once per frame
+    void Update () {
         if (Input.GetMouseButtonDown(0))
         {
             isClick = true;
@@ -128,22 +127,22 @@ public class ModelViewControl : MonoBehaviour {
         startPos = Input.mousePosition;
 
 
-        if (isSubmit)
+        if (NetworkData.isSubmit)
         {
             //发送数据
-            DialogUIControl.sc.SendInt(NetworkData.SENDROTATION);
-            DialogUIControl.sc.SendFloat(model.eulerAngles.x);
-            DialogUIControl.sc.SendFloat(model.eulerAngles.y);
-            DialogUIControl.sc.SendFloat(model.eulerAngles.z);
+            SocketConnect.getSocketInstance().SendInt(NetworkData.SENDROTATION);
+            SocketConnect.getSocketInstance().SendFloat(model.eulerAngles.x);
+            SocketConnect.getSocketInstance().SendFloat(model.eulerAngles.y);
+            SocketConnect.getSocketInstance().SendFloat(model.eulerAngles.z);
         }
     }
 
     private void OnApplicationQuit()
     {
         //程序退出时关闭连接
-        if(DialogUIControl.sc != null)
+        if(SocketConnect.getSocketInstance() != null)
         {
-            DialogUIControl.sc.close();
+            SocketConnect.getSocketInstance().close();
         } 
     }
 

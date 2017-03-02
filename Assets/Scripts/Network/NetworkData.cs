@@ -38,10 +38,15 @@ public static class NetworkData {
     public static int RECEIVESUCCEED = 3;
     //收到连接失败信号
     public static int RECEIVEFAILD = 4;
+    //发送断开连接信号
+    public static int SENDDISCONNECT = 5;
+
     #endregion
     #region 相关标志位
+    //连接数据是否成功
     public static bool isSucceed = false;
-
+    //是否提交
+    public static bool isSubmit = false;
 
     #endregion 
 
