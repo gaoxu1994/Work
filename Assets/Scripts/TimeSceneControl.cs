@@ -34,6 +34,7 @@ public class TimeSceneControl : MonoBehaviour {
             //如果提交之后
             if (NetworkData.isSubmit)
             {
+                Debug.Log("TimeSceneControl" + "Update");
                 //发送断开连接信号
                 SocketConnect.getSocketInstance().SendInt(NetworkData.SENDDISCONNECT);
                 SocketConnect.getSocketInstance().close();
@@ -45,6 +46,19 @@ public class TimeSceneControl : MonoBehaviour {
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
             //加载第一场景
             SceneManager.LoadScene("FirstScene");
+        }
+    }
+
+
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("退出程序连接");
+        //程序退出时关闭连接
+        if (SocketConnect.getSocketInstance() != null)
+        {
+            Debug.Log("OnApplicationQuit");
+            SocketConnect.getSocketInstance().close();
         }
     }
 }

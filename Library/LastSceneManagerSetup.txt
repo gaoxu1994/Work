@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/DesignCarScene.unity
+- path: Assets/Scenes/SceneTimeControl.unity
   isLoaded: 1
   isActive: 1

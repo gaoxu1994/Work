@@ -24,15 +24,11 @@ public class ModelViewControl : MonoBehaviour {
     private GameObject RTCamera;
     private GameObject MainCom;
 
-
-    private RenderTexture rt;
-
     private Object preb;
 
     void Start () {
 
         RTCamera = GameObject.Find("RTCamera");
-        rt = RTCamera.GetComponent<Camera>().targetTexture;
         model = RTCamera.transform.Find("Models");
         //注册监听
         EventTriggerListener.Get(gameObject).onEnter = OnModelViewEnter;
@@ -85,7 +81,6 @@ public class ModelViewControl : MonoBehaviour {
     {
         isEnter = false;
     }
-
     private void OnDestroy()
     {
         isInit = false;
@@ -104,7 +99,7 @@ public class ModelViewControl : MonoBehaviour {
             isClick = false;
         }
 
-        if (isClick && isEnter && (Time.time - clickBeginTime) > interval)
+        if (!DragMe.isDraging &&isClick && isEnter && (Time.time - clickBeginTime) > interval)
         {
             endPos = Input.mousePosition;
             Move_X = endPos.x - startPos.x;
@@ -114,6 +109,7 @@ public class ModelViewControl : MonoBehaviour {
             Move_Y = Mathf.Abs(Move_Y) > 10 ? Move_Y : 0;
             RotateModel(Move_X, Move_Y);
             clickBeginTime = Time.time;
+            startPos = endPos;
         }
     }
 
@@ -124,11 +120,9 @@ public class ModelViewControl : MonoBehaviour {
         right = model.worldToLocalMatrix * model.right;
         model.Rotate(up, -moveX,Space.World);
         model.Rotate(right, moveY, Space.World);
-        startPos = Input.mousePosition;
-
-
         if (NetworkData.isSubmit)
         {
+            Debug.Log("RotateModel");
             //发送数据
             SocketConnect.getSocketInstance().SendInt(NetworkData.SENDROTATION);
             SocketConnect.getSocketInstance().SendFloat(model.eulerAngles.x);
@@ -136,14 +130,4 @@ public class ModelViewControl : MonoBehaviour {
             SocketConnect.getSocketInstance().SendFloat(model.eulerAngles.z);
         }
     }
-
-    private void OnApplicationQuit()
-    {
-        //程序退出时关闭连接
-        if(SocketConnect.getSocketInstance() != null)
-        {
-            SocketConnect.getSocketInstance().close();
-        } 
-    }
-
 }

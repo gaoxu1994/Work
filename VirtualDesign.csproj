@@ -81,6 +81,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\DragMe.cs" />
+    <Compile Include="Assets\DropMe.cs" />
     <Compile Include="Assets\Scripts\CheckActive.cs" />
     <Compile Include="Assets\Scripts\DesignAirplaneScripts\DesignAirplaneControl.cs" />
     <Compile Include="Assets\Scripts\DesignAirplaneScripts\SelectAirplaneColorControl.cs" />
